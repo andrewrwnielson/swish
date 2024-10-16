@@ -1,0 +1,6 @@
+@> cat test_cases/resources/quote.txt
+Premature optimization is the root of all evil.
+    -- Donald Knuth
+@> wc test_cases/resources/gatsby.txt
+6772  51187 299452 test_cases/resources/gatsby.txt
+@> exit

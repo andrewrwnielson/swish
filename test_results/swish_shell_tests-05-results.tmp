@@ -1,0 +1,8 @@
+==========================================================================================
+== Test 5: Change to Non-Existent Directory
+== Attempts to change to a non-existent directory. Shell should print out an
+== appropriate error message.
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_tests-05-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_tests-05-actual.tmp'
+Test PASSED

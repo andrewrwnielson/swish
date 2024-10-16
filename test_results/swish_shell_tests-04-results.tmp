@@ -1,0 +1,7 @@
+==========================================================================================
+== Test 4: Change Current Directory (Absolute Path)
+== Change the current directory using an absolute path as argument.
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_tests-04-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_tests-04-actual.tmp'
+Test PASSED

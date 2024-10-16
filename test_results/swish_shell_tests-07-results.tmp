@@ -1,0 +1,20 @@
+==========================================================================================
+== Test 7: Execute Commands with a Single Argument
+== Execute the 'cat' and 'wc' commands with a single argument
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_tests-07-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_tests-07-actual.tmp'
+Test FAILED
+== Side-by-Side Comparison ==
+== Differing lines have a character like '|' '>' or '<' in the middle
+==== EXPECT ====                                     ==== ACTUAL ====
+@> cat test_cases/resources/quote.txt                @> cat test_cases/resources/quote.txt
+Premature optimization is the root of all evil.    <
+    -- Donald Knuth                                <
+@> wc test_cases/resources/gatsby.txt                @> wc test_cases/resources/gatsby.txt
+6772  51187 299452 test_cases/resources/gatsby.txt <
+@> exit                                              @> exit
+== Line Differences ==
+EXPECT 2) Premature optimization is the root of all evil.
+EXPECT 3)     -- Donald Knuth
+EXPECT 5) 6772  51187 299452 test_cases/resources/gatsby.txt

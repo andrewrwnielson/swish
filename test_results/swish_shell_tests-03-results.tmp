@@ -1,0 +1,8 @@
+==========================================================================================
+== Test 3: Change Current Working Directory
+== Prints the current working directory, changes to the 'test_cases' directory,
+== then prints the current working directory again.
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_tests-03-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_tests-03-actual.tmp'
+Test PASSED

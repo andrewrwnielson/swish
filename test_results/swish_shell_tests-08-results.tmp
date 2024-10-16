@@ -1,0 +1,16 @@
+==========================================================================================
+== Test 8: Execute a Non-Existent Command
+== Attempt to run a program that does not exist. Shell should print out an
+== appropriate message.
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_tests-08-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_tests-08-actual.tmp'
+Test FAILED
+== Side-by-Side Comparison ==
+== Differing lines have a character like '|' '>' or '<' in the middle
+==== EXPECT ====                   ==== ACTUAL ====
+@> ./this_program_does_not_exist   @> ./this_program_does_not_exist
+exec: No such file or directory  <
+@> exit                            @> exit
+== Line Differences ==
+EXPECT 2) exec: No such file or directory

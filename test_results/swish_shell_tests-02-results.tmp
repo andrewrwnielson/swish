@@ -1,0 +1,7 @@
+==========================================================================================
+== Test 2: Print Current Working Directory
+== Starts up a swish shell and prints the current working directory.
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_tests-02-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_tests-02-actual.tmp'
+Test PASSED

@@ -1,0 +1,8 @@
+==========================================================================================
+== Test 1: Startup, Prompt, and Exit
+== Starts up a swish shell, which should prompt for input  and then exit when
+== instructed to.
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_tests-01-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_tests-01-actual.tmp'
+Test PASSED

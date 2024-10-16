@@ -1,0 +1,16 @@
+==========================================================================================
+== Test 6: Execute a Basic command
+== Changes to 'test_cases/resources' directory and does an 'ls' command
+Running test...
+Expected output is in file 'test_results/raw/swish_shell_tests-06-expected.tmp'
+Actual output is in file 'test_results/raw/swish_shell_tests-06-actual.tmp'
+Test FAILED
+== Side-by-Side Comparison ==
+== Differing lines have a character like '|' '>' or '<' in the middle
+==== EXPECT ====                    ==== ACTUAL ====
+@> cd test_cases/resources          @> cd test_cases/resources
+@> ls                               @> ls
+gatsby.txt quote.txt slow_write.c <
+@> exit                             @> exit
+== Line Differences ==
+EXPECT 3) gatsby.txt quote.txt slow_write.c

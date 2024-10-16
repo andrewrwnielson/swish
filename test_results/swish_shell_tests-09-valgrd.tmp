@@ -1,0 +1,6 @@
+==38201== Memcheck, a memory error detector
+==38201== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==38201== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==38201== Command: ./swish
+==38201== Parent PID: 38141
+==38201== 
