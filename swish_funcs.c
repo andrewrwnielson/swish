@@ -27,6 +27,7 @@ int tokenize(char *s, strvec_t *tokens) {
   char *tok = strtok(s, " ");
   while (tok != NULL) {
     if (strvec_add(tokens, tok) == -1) {
+      printf("Failed to add token to tokens string vector\n");
       return -1;
     }
     tok = strtok(NULL, " ");
@@ -35,12 +36,28 @@ int tokenize(char *s, strvec_t *tokens) {
 }
 
 int run_command(strvec_t *tokens) {
-  // TODO Task 2: Execute the specified program (token 0) with the
-  // specified command-line arguments
-  // THIS FUNCTION SHOULD BE CALLED FROM A CHILD OF THE MAIN SHELL PROCESS
-  // Hint: Build a string array from the 'tokens' vector and pass this into
-  // execvp() Another Hint: You have a guarantee of the longest possible needed
-  // array, so you won't have to use malloc.
+  // program to be ran
+  char *program = strvec_get(tokens, 0);
+
+  // command-line arguments for program
+  char *arguments[MAX_ARGS + 1];
+
+  // current token from tokens
+  char *i_token;
+  int i = 0;
+  while ((i_token = strvec_get(tokens, i)) != NULL && i < MAX_ARGS - 1) {
+    // add current token to arguments array
+    arguments[i] = i_token;
+    i++;
+  }
+  // NULL sentinel
+  arguments[i] = NULL;
+
+  execvp(program, arguments);
+
+  // if exec returns then an error has occured
+  perror("exec");
+  exit(EXIT_FAILURE);
 
   // TODO Task 3: Extend this function to perform output redirection before
   // exec()'ing Check for '<' (redirect input), '>' (redirect output), '>>'

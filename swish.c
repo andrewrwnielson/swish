@@ -58,8 +58,6 @@ int main(int argc, char **argv) {
     const char *first_token = strvec_get(&tokens, 0);
 
     if (strcmp(first_token, "pwd") == 0) {
-      // TODO Task 1: Print the shell's current working directory
-      // Use the getcwd() system call
       char buf[CMD_LEN];
       if (getcwd(buf, CMD_LEN) == NULL) {
         perror("getcwd");
@@ -69,12 +67,6 @@ int main(int argc, char **argv) {
     }
 
     else if (strcmp(first_token, "cd") == 0) {
-      // TODO Task 1: Change the shell's current working directory
-      // Use the chdir() system call
-      // If the user supplied an argument (token at index 1), change to that
-      // directory Otherwise, change to the home directory by default This is
-      // available in the HOME environment variable (use getenv())
-
       // argument for directory to change to
       const char *second_token = strvec_get(&tokens, 1);
       const char *dir;
@@ -86,6 +78,7 @@ int main(int argc, char **argv) {
         dir = second_token;
       }
 
+      // change the directory and handle errors accordingly
       if (chdir(dir) != 0) {
         perror("chdir");
       }
@@ -142,13 +135,20 @@ int main(int argc, char **argv) {
     }
 
     else {
-      // TODO Task 2: If the user input does not match any built-in shell
-      // command, treat the input as a program name and command-line arguments
-      // USE THE run_command() FUNCTION DEFINED IN swish_funcs.c IN YOUR
-      // IMPLEMENTATION You should take the following steps:
-      //   1. Use fork() to spawn a child process
-      //   2. Call run_command() in the child process
-      //   2. In the parent, use waitpid() to wait for the program to exit
+      // parent process
+      pid_t pid = fork();
+      int status;
+
+      if (pid == 0) {
+        // child process
+        run_command(&tokens);
+      } else if (pid > 0) {
+        // parent process to wait
+        waitpid(pid, &status, WUNTRACED);
+      } else {
+        // error on fork
+        perror("fork");
+      }
 
       // TODO Task 4: Set the child process as the target of signals sent to
       // the terminal via the keyboard. To do this, call
