@@ -141,7 +141,10 @@ int main(int argc, char **argv) {
 
       if (pid == 0) {
         // child process
-        run_command(&tokens);
+        if (run_command(&tokens) == -1) {
+          // child exits on failure
+          exit(1);
+        }
       } else if (pid > 0) {
         // parent process to wait
         waitpid(pid, &status, WUNTRACED);

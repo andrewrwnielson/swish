@@ -19,9 +19,7 @@
 #define MAX_ARGS 10
 
 int tokenize(char *s, strvec_t *tokens) {
-  // TODO Task 0: Tokenize string s
-  // Assume each token is separated by a single space (" ")
-  // Use the strtok() function to accomplish this
+  // Tokenize string s with space as delimeter
   // Add each token to the 'tokens' parameter (a string vector)
   // Return 0 on success, -1 on error
   char *tok = strtok(s, " ");
@@ -43,29 +41,79 @@ int run_command(strvec_t *tokens) {
   char *arguments[MAX_ARGS + 1];
 
   // current token from tokens
+  // add tokens but exlude redirect operators
   char *i_token;
   int i = 0;
   while ((i_token = strvec_get(tokens, i)) != NULL && i < MAX_ARGS - 1) {
-    // add current token to arguments array
+    // add current token to arguments array if it is not a redirect operator
+    if (strcmp(i_token, "<") == 0 || strcmp(i_token, ">") == 0 ||
+        strcmp(i_token, ">>") == 0) {
+      break;
+    }
     arguments[i] = i_token;
     i++;
   }
   // NULL sentinel
   arguments[i] = NULL;
 
+  int fd;
+  // check for redirection
+  for (i = 0; strvec_get(tokens, i) != NULL; i++) {
+    if (strcmp(strvec_get(tokens, i), "<") == 0) {
+      // open file for reading
+      fd = open(strvec_get(tokens, i + 1), O_RDONLY);
+      if (fd == -1) {
+        perror("Failed to open input file");
+        return -1;
+      }
+      // redirect stdin
+      if (dup2(fd, STDIN_FILENO) == -1) {
+        perror("dup2");
+        close(fd);
+        return -1;
+      }
+      // close file descriptor
+      close(fd);
+    } else if (strcmp(strvec_get(tokens, i), ">") == 0) {
+      // open file for writing
+      fd = open(strvec_get(tokens, i + 1), O_WRONLY | O_CREAT | O_TRUNC,
+                S_IRUSR | S_IWUSR);
+      if (fd == -1) {
+        perror("Failed to open output file");
+        return -1;
+      }
+      // redirect stdout
+      if (dup2(fd, STDOUT_FILENO) == -1) {
+        perror("dup2");
+        close(fd);
+        return -1;
+      }
+      // close file descriptor
+      close(fd);
+    } else if (strcmp(strvec_get(tokens, i), ">>") == 0) {
+      // open file for appending
+      fd = open(strvec_get(tokens, i + 1), O_WRONLY | O_CREAT | O_APPEND,
+                S_IRUSR | S_IWUSR);
+      if (fd == -1) {
+        perror("Failed to open output file");
+        return -1;
+      }
+      // redirect stdout
+      if (dup2(fd, STDOUT_FILENO) == -1) {
+        perror("dup2");
+        close(fd);
+        return -1;
+      }
+      // close file descriptor
+      close(fd);
+    }
+  }
+
   execvp(program, arguments);
 
   // if exec returns then an error has occured
   perror("exec");
-  exit(EXIT_FAILURE);
-
-  // TODO Task 3: Extend this function to perform output redirection before
-  // exec()'ing Check for '<' (redirect input), '>' (redirect output), '>>'
-  // (redirect and append output) entries inside of 'tokens' (the strvec_find()
-  // function will do this for you) Open the necessary file for reading (<),
-  // writing (>), or appending (>>) Use dup2() to redirect stdin (<), stdout (>
-  // or >>) DO NOT pass redirection operators and file names to exec()'d program
-  // E.g., "ls -l > out.txt" should be exec()'d with strings "ls", "-l", NULL
+  return -1;
 
   // TODO Task 4: You need to do two items of setup before exec()'ing
   // 1. Restore the signal handlers for SIGTTOU and SIGTTIN to their defaults.
