@@ -72,7 +72,6 @@ int run_command(strvec_t *tokens) {
         close(fd);
         return -1;
       }
-      // close file descriptor
       close(fd);
     } else if (strcmp(strvec_get(tokens, i), ">") == 0) {
       // open file for writing
@@ -88,7 +87,6 @@ int run_command(strvec_t *tokens) {
         close(fd);
         return -1;
       }
-      // close file descriptor
       close(fd);
     } else if (strcmp(strvec_get(tokens, i), ">>") == 0) {
       // open file for appending
@@ -104,9 +102,31 @@ int run_command(strvec_t *tokens) {
         close(fd);
         return -1;
       }
-      // close file descriptor
       close(fd);
     }
+  }
+
+  // reset signal handlers
+  struct sigaction sac;
+  sac.sa_handler = SIG_DFL;
+  // block all signals
+  if (sigemptyset(&sac.sa_mask) == -1) {
+    perror("sigemptyset");
+    return -1;
+  }
+  sac.sa_flags = 0;
+  // ignore SIGTTIN and SIGTTOU
+  if (sigaction(SIGTTIN, &sac, NULL) == -1 ||
+      sigaction(SIGTTOU, &sac, NULL) == -1) {
+    perror("sigaction");
+    return -1;
+  }
+
+  pid_t pid = getpid();
+  // set process group id to pid
+  if (setpgid(0, pid) == -1) {
+    perror("setpgid");
+    return -1;
   }
 
   execvp(program, arguments);
@@ -114,17 +134,6 @@ int run_command(strvec_t *tokens) {
   // if exec returns then an error has occured
   perror("exec");
   return -1;
-
-  // TODO Task 4: You need to do two items of setup before exec()'ing
-  // 1. Restore the signal handlers for SIGTTOU and SIGTTIN to their defaults.
-  // The code in main() within swish.c sets these handlers to the SIG_IGN value.
-  // Adapt this code to use sigaction() to set the handlers to the SIG_DFL
-  // value.
-  // 2. Change the process group of this process (a child of the main shell).
-  // Call getpid() to get its process ID then call setpgid() and use this
-  // process ID as the value for the new process group ID
-
-  return 0;
 }
 
 int resume_job(strvec_t *tokens, job_list_t *jobs, int is_foreground) {

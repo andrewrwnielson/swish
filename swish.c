@@ -147,17 +147,23 @@ int main(int argc, char **argv) {
         }
       } else if (pid > 0) {
         // parent process to wait
-        waitpid(pid, &status, WUNTRACED);
+        if (tcsetpgrp(STDIN_FILENO, pid) == -1) {
+          perror("tcsetpgrp");
+        }
+
+        // wait for child process to finish
+        if (waitpid(pid, &status, WUNTRACED) == -1) {
+          perror("waitpid");
+        }
+
+        // check if child process was stopped by a signal
+        if (tcsetpgrp(STDIN_FILENO, getpid()) == -1) {
+          perror("tcsetpgrp");
+        }
       } else {
         // error on fork
         perror("fork");
       }
-
-      // TODO Task 4: Set the child process as the target of signals sent to
-      // the terminal via the keyboard. To do this, call
-      // 'tcsetpgrp(STDIN_FILENO, <child_pid>)', where child_pid is the
-      // child's process ID just returned by fork(). Do this in the parent
-      // process.
 
       // TODO Task 5: Handle the issue of foreground/background terminal
       // process groups. Do this by taking the following steps in the shell
